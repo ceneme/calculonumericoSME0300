@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#define MAXITER 32
+#define MAXITER 64
 
 double f(double x)
 {
@@ -20,31 +20,45 @@ double df(double x)
     return (double)( (15*pow(x,4)) - (36*pow(x,3)) + (6*pow(x,2)) - (12*x) - 1);
 }
 
-double newton(double x, double epsilon, int maxiter)
+double max(double a, double b)
 {
-    double x_k = f(x) / df(x);
-    
+    return b > a ? b : a;
+}
+
+double newton(double x0, double epsilon, FILE* fp)
+{
+    double xk, ek;
+
     int k = 0;
-    printf("%-10s %-20s %-20s %-20s %s\n", "k", "x_k", "f(x_k)", "f\'(x_k)", "e_k");
+    fprintf(fp, "%-10s %-20s %-20s %-20s %s\n", "k", "x_k", "f(x_k)", "f\'(x_k)", "e_k");
+    fprintf(fp, "%-10d %-20.8lf %-20.8lf %-20.8lf %.8lf\n", k+1, x0, f(x0), df(x0), fabs(x0 - x0));
+    k++;
 
-    while (fabs(x_k) >= epsilon && k < maxiter)
+    do 
     {
-        x_k = f(x) / df(x);
-        x = x - x_k;
-        printf("%-10d %-20.8lf %-20.8lf %-20.8lf %.8lf\n", k+1, x, f(x), df(x), fabs(x_k - x));
+        xk = x0 - (f(x0) / df(x0));
+        ek = fabs(xk - x0);
+
+        fprintf(fp, "%-10d %-20.8lf %-20.8lf %-20.8lf %.8lf\n", k+1, xk, f(xk), df(xk), ek);
+
+        x0 = xk;
         k++;
-    }
 
-    if (k == maxiter)
-        printf("maxiter atingido\n");
+    } while (ek >= epsilon * max(1, fabs(xk)) && k < MAXITER);
 
-    return x;
+    return xk;
 }
 
 int main(int argc, char *argv[])
 {
+    FILE* fp = fopen("newton_saida1.txt", "w");
 
-    printf("Raiz aproximada = %lf\n", newton(1, 0.000001, MAXITER));
+    // intervalo [-1,0]
+    newton(-0.2, 0.000001, fp);
 
+    // intervalo [0,1]
+    fp = fopen("newton_saida2.txt", "w");
+    newton(0.2, 0.000001, fp);
+    
     return EXIT_SUCCESS;
 }

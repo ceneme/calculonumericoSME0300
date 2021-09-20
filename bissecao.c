@@ -15,51 +15,59 @@ double f(double x)
     return (double)( (3*pow(x,5)) - (9*pow(x,4)) + (2*pow(x,3)) - (6*pow(x,2)) - x + 3);
 }
 
+double max(double a, double b)
+{
+    return b > a ? b : a;
+}
+
 double bisection(double a, double b, double epsilon, FILE* fp)
 {
-    if (f(a) * f(b) >= 0)
-    {
-        printf("Intervalo Invalido\n");
-    }
-
     int k = 0;
+    double x0 = a;
+    double ek, xk, f_xk;
 
-    printf("%-10s %-20s %-20s %-20s %-20s %s\n", "k", "a", "b", "x_k", "f(x_k)", "e_k");
-    //printf("%-10d %-20.8lf %-20.8lf %-20.8lf %-20.8lf %.8lf\n", k, a, b, (a+b)/2, f((a+b)/2), fabs(a - b));
+    fprintf(fp, "%-10s %-20s %-20s %-20s %-20s %s\n", "k", "a", "b", "x_k", "f(x_k)", "e_k");
 
-    double c = a;
-    while ((b-a) >= epsilon && k < MAXITER)
+    if (f(a)*f(b) < 0)
     {
-        fwrite(&k, sizeof(int), 1, fp);
-        c = (a+b)/2;
+        do 
+        {
+            xk = (a + b) / 2;
+            ek = fabs(xk-x0);
+            f_xk = f(xk);
 
-        if (f(c) == 0.0)
-            break;
+            fprintf(fp, "%-10d %-20.8lf %-20.8lf %-20.8lf %-20.8lf %.8lf\n", k+1, a, b, xk, f_xk, ek);
 
-        else if (f(c)*f(a) < 0)
-            b = c;
-        else
-            a = c;
-        
-        printf("%-10d %-20.8lf %-20.8lf %-20.8lf %-20.8lf %.8lf\n", k+1, a, b, c, f(c), fabs(a - b));
-        k++;
+            if (f_xk == 0)
+                return xk;
+
+            else if (f(a)*f_xk < 0)
+                b = xk;
+            else 
+                a = xk;
+
+            x0 = xk;
+            k++;
+        }
+        while (fabs(ek) >= epsilon * max(1, fabs(xk)) && k < MAXITER);
     }
-    printf("Raiz aproximada = %.6lf\n", c);
-    return c;
 }
 
 int main(int argc, char *argv[])
 {
+    // intervalo [-1,0]
     double a = -1;
     double b = 0;
     double epsilon = 0.000001;
-
-    FILE* fp = fopen("bissecao_saida1.txt", "wt");
-
+    FILE* fp = fopen("bissecao_saida1.txt", "w");
+    
     bisection(a, b, epsilon, fp);
+
+    // intervalo [0,1]
     a = 0;
     b = 1;
-    printf("-------------------------------------------------------------------------------------------------------\n");
+    fp = fopen("bissecao_saida2.txt", "w");
+    
     bisection(a, b, epsilon, fp);
 
     return EXIT_SUCCESS;
