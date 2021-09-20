@@ -6,3 +6,6 @@ run:
 	./bissecao_exec
 	./newton_exec
 	./secantes_exec
+	rm bissecao_exec
+	rm newton_exec
+	rm secantes_exec
