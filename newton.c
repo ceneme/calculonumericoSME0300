@@ -54,11 +54,11 @@ int main(int argc, char *argv[])
     FILE* fp = fopen("newton_saida1.txt", "w");
 
     // intervalo [-1,0]
-    newton(-0.2, 0.000001, fp);
+    newton(-1, 0.000001, fp);
 
     // intervalo [0,1]
     fp = fopen("newton_saida2.txt", "w");
-    newton(0.2, 0.000001, fp);
+    newton(1, 0.000001, fp);
     
     return EXIT_SUCCESS;
 }

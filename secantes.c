@@ -57,14 +57,16 @@ double secant(double x0, double x1, double epsilon, FILE* fp)
 int main(int argc, char *argv[])
 {
     FILE* fp = fopen("secantes_saida1.txt", "w");
-    double x1 = -0.8, x2 = -0.1, epsilon = 0.000001;
+    double x1, x2, epsilon = 0.000001;
+    x1 = 0.0;
+    x2 = -1.0;
     
     // intervalo [-1, 0]
     secant(x1, x2, epsilon, fp);
 
     fp = fopen("secantes_saida2.txt", "w");
-    x1 = 0.2;
-    x2 = 0.8;
+    x1 = 0;
+    x2 = 1;
 
     // intervalo [0,1]
     secant(x1,x2,epsilon,fp);
