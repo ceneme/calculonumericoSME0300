@@ -21,23 +21,23 @@ double max(double a, double b)
     return b > a ? b : a;
 }
 
-double secant(double x0, double x1, double epsilon, FILE* fp)
+double secant(double x0, double x1, double epsilon, FILE* fp, double x_barra)
 {
-    double xk, x_aux, ek;
+    double xk, x_aux, ek, parada;
     int k = 0;
     bool isroot;
 
     fprintf(fp, "%-10s %-20s %-20s %s\n", "k", "x_k", "f(x_k)", "e_k");
-    fprintf(fp, "%-10d %-20.8lf %-20.8lf %.8lf\n", k+1, x0, f(x0), fabs(x0-x0));
+    fprintf(fp, "%-10d %-20.8lf %-20.8lf %.8lf\n", k+1, x0, f(x0), fabs(x0-x_barra));
     k++;
-    fprintf(fp, "%-10d %-20.8lf %-20.8lf %.8lf\n", k+1, x1, f(x1), fabs(x1-x0));
+    fprintf(fp, "%-10d %-20.8lf %-20.8lf %.8lf\n", k+1, x1, f(x1), fabs(x1-x_barra));
     k++;
 
     do
     {
         xk = (f(x1)*x0 - f(x0)*x1) / (f(x1) - f(x0));
-
-        ek = fabs(xk - x1);
+        ek = fabs(xk-x_barra);
+        parada = fabs(xk - x1);
 
         fprintf(fp, "%-10d %-20.8lf %-20.8lf %.8lf\n", k+1, xk, f(xk), ek);
 
@@ -46,7 +46,7 @@ double secant(double x0, double x1, double epsilon, FILE* fp)
         x1 = xk;
         k++;
     }
-    while(fabs(ek) >= epsilon * max(1, fabs(xk)) && k < MAXITER);
+    while(fabs(parada) >= epsilon * max(1, fabs(xk)) && k < MAXITER);
 
     if (k == MAXITER)
         printf("Maxiter atingido\n");
@@ -62,14 +62,14 @@ int main(int argc, char *argv[])
     x2 = -1.0;
     
     // intervalo [-1, 0]
-    secant(x1, x2, epsilon, fp);
+    secant(x1, x2, epsilon, fp, -1/sqrt(3));
 
     fp = fopen("secantes_saida2.txt", "w");
     x1 = 0;
     x2 = 1;
 
     // intervalo [0,1]
-    secant(x1,x2,epsilon,fp);
+    secant(x1, x2, epsilon, fp, 1/sqrt(3));
 
     return EXIT_SUCCESS;
 }

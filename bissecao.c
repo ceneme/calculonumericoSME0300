@@ -20,11 +20,11 @@ double max(double a, double b)
     return b > a ? b : a;
 }
 
-double bisection(double a, double b, double epsilon, FILE* fp)
+double bisection(double a, double b, double epsilon, FILE* fp, double x_barra)
 {
     int k = 0;
     double x0 = a;
-    double ek, xk, f_xk;
+    double ek, xk, f_xk, parada;
 
     fprintf(fp, "%-10s %-20s %-20s %-20s %-20s %s\n", "k", "a", "b", "x_k", "f(x_k)", "e_k");
 
@@ -33,7 +33,8 @@ double bisection(double a, double b, double epsilon, FILE* fp)
         do 
         {
             xk = (a + b) / 2;
-            ek = fabs(xk-x0);
+            ek = fabs(xk-x_barra);
+            parada = fabs(xk-x0);
             f_xk = f(xk);
 
             fprintf(fp, "%-10d %-20.8lf %-20.8lf %-20.8lf %-20.8lf %.8lf\n", k+1, a, b, xk, f_xk, ek);
@@ -49,7 +50,7 @@ double bisection(double a, double b, double epsilon, FILE* fp)
             x0 = xk;
             k++;
         }
-        while (fabs(ek) >= epsilon * max(1, fabs(xk)) && k < MAXITER);
+        while (fabs(parada) >= epsilon * max(1, fabs(xk)) && k < MAXITER);
     }
 }
 
@@ -61,14 +62,14 @@ int main(int argc, char *argv[])
     double epsilon = 0.000001;
     FILE* fp = fopen("bissecao_saida1.txt", "w");
     
-    bisection(a, b, epsilon, fp);
+    bisection(a, b, epsilon, fp, -1/sqrt(3));
 
     // intervalo [0,1]
     a = 0;
     b = 1;
     fp = fopen("bissecao_saida2.txt", "w");
     
-    bisection(a, b, epsilon, fp);
+    bisection(a, b, epsilon, fp, 1/sqrt(3));
 
     return EXIT_SUCCESS;
 }
