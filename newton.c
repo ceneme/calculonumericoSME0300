@@ -31,7 +31,7 @@ double newton(double x0, double epsilon, FILE* fp, double x_barra)
 
     int k = 0;
     fprintf(fp, "%-10s %-20s %-20s %-20s %s\n", "k", "x_k", "f(x_k)", "f\'(x_k)", "e_k");
-    fprintf(fp, "%-10d %-20.8lf %-20.8lf %-20.8lf %.8lf\n", k+1, x0, f(x0), df(x0), fabs(x0 - x_barra));
+    fprintf(fp, "%-10d %-20.8lf %-20.8lf %-20.8lf %.8lf\n", k, x0, f(x0), df(x0), fabs(x0 - x_barra));
     k++;
 
     do 
@@ -40,7 +40,7 @@ double newton(double x0, double epsilon, FILE* fp, double x_barra)
         parada = fabs(xk - x0);
         ek = fabs(xk - x_barra);
 
-        fprintf(fp, "%-10d %-20.8lf %-20.8lf %-20.8lf %.8lf\n", k+1, xk, f(xk), df(xk), ek);
+        fprintf(fp, "%-10d %-20.8lf %-20.8lf %-20.8lf %.8lf\n", k, xk, f(xk), df(xk), ek);
 
         x0 = xk;
         k++;

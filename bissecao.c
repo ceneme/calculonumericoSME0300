@@ -37,7 +37,7 @@ double bisection(double a, double b, double epsilon, FILE* fp, double x_barra)
             parada = fabs(xk-x0);
             f_xk = f(xk);
 
-            fprintf(fp, "%-10d %-20.8lf %-20.8lf %-20.8lf %-20.8lf %.8lf\n", k+1, a, b, xk, f_xk, ek);
+            fprintf(fp, "%-10d %-20.8lf %-20.8lf %-20.8lf %-20.8lf %.8lf\n", k, a, b, xk, f_xk, ek);
 
             if (f_xk == 0)
                 return xk;

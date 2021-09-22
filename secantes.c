@@ -28,9 +28,9 @@ double secant(double x0, double x1, double epsilon, FILE* fp, double x_barra)
     bool isroot;
 
     fprintf(fp, "%-10s %-20s %-20s %s\n", "k", "x_k", "f(x_k)", "e_k");
-    fprintf(fp, "%-10d %-20.8lf %-20.8lf %.8lf\n", k+1, x0, f(x0), fabs(x0-x_barra));
+    fprintf(fp, "%-10d %-20.8lf %-20.8lf %.8lf\n", k, x0, f(x0), fabs(x0-x_barra));
     k++;
-    fprintf(fp, "%-10d %-20.8lf %-20.8lf %.8lf\n", k+1, x1, f(x1), fabs(x1-x_barra));
+    fprintf(fp, "%-10d %-20.8lf %-20.8lf %.8lf\n", k, x1, f(x1), fabs(x1-x_barra));
     k++;
 
     do
@@ -39,7 +39,7 @@ double secant(double x0, double x1, double epsilon, FILE* fp, double x_barra)
         ek = fabs(xk-x_barra);
         parada = fabs(xk - x1);
 
-        fprintf(fp, "%-10d %-20.8lf %-20.8lf %.8lf\n", k+1, xk, f(xk), ek);
+        fprintf(fp, "%-10d %-20.8lf %-20.8lf %.8lf\n", k, xk, f(xk), ek);
 
         // atualizando o intervalo para proxima iteracao
         x0 = x1;
